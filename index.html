@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore the States</title>
+    <style>
+        body {
+            background-color: black;
+            color: rgb(12, 12, 12);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .states {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .state {
+            margin: 10px;
+        }
+
+        .state img {
+            width: 100px;
+            height: auto;
+            border: 2px solid white;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Explore the Best of the States</h1>
+        <p>Choose your destination: California or Texas</p>
+    </header>
+
+    <section class="states">
+        <div class="state">
+            <h2>California</h2>
+            <a href="#" onclick="showMap('california')">
+                <img src="images/Flag_of_California.png" alt="California Flag">
+            </a>
+            <p><a href="california.html">Explore California</a></p>
+
+        </div>
+
+        <div class="state">
+            <h2>Texas</h2>
+            <a href="#" onclick="showMap('texas')">
+                <img src="images/Flag_of_Texas.png" alt="Texas Flag">
+            </a>
+            <p><a href="texas.html">Explore Texas</a></p>
+
+        </div>
+    </section>
+
+    <div id="map"></div>
+
+    <footer>
+        <p>
+            <a href="index.html">Home</a>
+        </p>
+    </footer>
+
+    <script>
+        function initMap(state = 'california') {
+            const mapOptions = {
+                zoom: 5,
+                center: { lat: 36.7783, lng: -119.4179 }, // Default California center
+            };
+
+            const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            const locations = [
+                { name: "Texas Hill Country", lat: 29.582927, lng: -98.490853 },
+                { name: "Big Bend National Park", lat: 29.289027, lng: -103.185146 },
+                { name: "Guadalupe Mountains National Park", lat: 31.902019, lng: -104.908708 },
+                { name: "Mustang Island State Park", lat: 27.671329, lng: -97.173530 },
+                { name: "Port Aransas", lat: 27.832467, lng: -97.063204 },
+                { name: "Corpus Christi", lat: 27.796419, lng: -97.404129 },
+                { name: "Fredericksburg", lat: 30.271851, lng: -98.875290 },
+                { name: "San Antonio", lat: 29.425171, lng: -98.494614 },
+                { name: "Big Sur", lat: 36.3615, lng: -121.8563 },
+                { name: "Catalina Island", lat: 33.3878856, lng: -118.4163103 },
+                { name: "Lake Tahoe", lat: 38.939926, lng: -119.9771868 },
+                { name: "Redwood National and State Park", lat: 41.37133, lng: -124.03166 },
+                { name: "Mammoth Lake", lat: 37.64482879638672, lng: -118.96612548828125 },
+                { name: "Yosemite National Park", lat: 37.70814895629883, lng: -119.66239929199219 },
+                { name: "Sequoia National Park", lat: 36.604366302490234, lng: -118.73094940185547 },
+                { name: "Big Bear Lake", lat: 34.23849105834961, lng: -116.93598937988281 },
+                { name: "Golden Gate Bridge", lat: 37.8302731, lng: -122.4798443 },
+                { name: "Joshua Tree National Park", lat: 33.87435666527006, lng: -115.89860137123627 },
+                { name: "Point Reyes National Sea Shore", lat: 38.027183, lng: -122.878567 },
+                { name: "Death Valley National Park", lat: 36.461508, lng: -116.868874 }
+            ];
+
+            locations.forEach((location) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.name
+                });
+
+                const contentString = `<h3>${location.name}</h3><a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}" target=_blank">Get Directions</a>`;
+                const infoWindow = new google.maps.InfoWindow({
+                    content: contentString,
+                });
+
+                marker.addListener("click", function() {
+                    infoWindow.open(map, marker);
+                });
+            });
+        }
+
+        function showMap(state) {
+            initMap(state);
+        }
+
+        window.onload = function() {
+            initMap('california');
+        };
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6KqoT13LdD3Jgq_CWRPVa5_6HTW-Hdvw&callback=initMap"></script>
+
+</body>
+</html>
