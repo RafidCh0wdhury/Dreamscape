@@ -89,66 +89,89 @@
         </p>
     </footer>
 
-    <script>
-        function initMap(state = 'california') {
-            const mapOptions = {
-                zoom: 5,
-                center: { lat: 36.7783, lng: -119.4179 }, // Default California center
-            };
-
-            const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-            const locations = [
-                { name: "Texas Hill Country", lat: 29.582927, lng: -98.490853 },
-                { name: "Big Bend National Park", lat: 29.289027, lng: -103.185146 },
-                { name: "Guadalupe Mountains National Park", lat: 31.902019, lng: -104.908708 },
-                { name: "Mustang Island State Park", lat: 27.671329, lng: -97.173530 },
-                { name: "Port Aransas", lat: 27.832467, lng: -97.063204 },
-                { name: "Corpus Christi", lat: 27.796419, lng: -97.404129 },
-                { name: "Fredericksburg", lat: 30.271851, lng: -98.875290 },
-                { name: "San Antonio", lat: 29.425171, lng: -98.494614 },
-                { name: "Big Sur", lat: 36.3615, lng: -121.8563 },
-                { name: "Catalina Island", lat: 33.3878856, lng: -118.4163103 },
-                { name: "Lake Tahoe", lat: 38.939926, lng: -119.9771868 },
-                { name: "Redwood National and State Park", lat: 41.37133, lng: -124.03166 },
-                { name: "Mammoth Lake", lat: 37.64482879638672, lng: -118.96612548828125 },
-                { name: "Yosemite National Park", lat: 37.70814895629883, lng: -119.66239929199219 },
-                { name: "Sequoia National Park", lat: 36.604366302490234, lng: -118.73094940185547 },
-                { name: "Big Bear Lake", lat: 34.23849105834961, lng: -116.93598937988281 },
-                { name: "Golden Gate Bridge", lat: 37.8302731, lng: -122.4798443 },
-                { name: "Joshua Tree National Park", lat: 33.87435666527006, lng: -115.89860137123627 },
-                { name: "Point Reyes National Sea Shore", lat: 38.027183, lng: -122.878567 },
-                { name: "Death Valley National Park", lat: 36.461508, lng: -116.868874 }
-            ];
-
-            locations.forEach((location) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: location.lat, lng: location.lng },
-                    map: map,
-                    title: location.name
-                });
-
-                const contentString = `<h3>${location.name}</h3><a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}" target=_blank">Get Directions</a>`;
-                const infoWindow = new google.maps.InfoWindow({
-                    content: contentString,
-                });
-
-                marker.addListener("click", function() {
-                    infoWindow.open(map, marker);
-                });
-            });
-        }
-
-        function showMap(state) {
-            initMap(state);
-        }
-
-        window.onload = function() {
-            initMap('california');
+<script>
+    function initMap(state = 'california') {
+        // Set default map options
+        const mapOptions = {
+            zoom: 5,
+            center: { lat: 36.7783, lng: -119.4179 }, // Default California center
         };
-    </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6KqoT13LdD3Jgq_CWRPVa5_6HTW-Hdvw&callback=initMap"></script>
+        // Initialize the map
+        const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        // Define the markers for California
+        const californiaLocations = [
+            { name: "Big Sur", lat: 36.3615, lng: -121.8563 },
+            { name: "Catalina Island", lat: 33.3878856, lng: -118.4163103 },
+            { name: "Lake Tahoe", lat: 38.939926, lng: -119.9771868 },
+            { name: "Redwood National and State Park", lat: 41.37133, lng: -124.03166 },
+            { name: "Mammoth Lake", lat: 37.64482879638672, lng: -118.96612548828125 },
+            { name: "Yosemite National Park", lat: 37.70814895629883, lng: -119.66239929199219 },
+            { name: "Sequoia National Park", lat: 36.604366302490234, lng: -118.73094940185547 },
+            { name: "Big Bear Lake", lat: 34.23849105834961, lng: -116.93598937988281 },
+            { name: "Golden Gate Bridge", lat: 37.8302731, lng: -122.4798443 },
+            { name: "Joshua Tree National Park", lat: 33.87435666527006, lng: -115.89860137123627 },
+            { name: "Point Reyes National Sea Shore", lat: 38.027183, lng: -122.878567 },
+            { name: "Death Valley National Park", lat: 36.461508, lng: -116.868874 }
+        ];
+
+        // Define the markers for Texas
+        const texasLocations = [
+            { name: "Texas Hill Country", lat: 29.582927, lng: -98.490853 },
+            { name: "Big Bend National Park", lat: 29.289027, lng: -103.185146 },
+            { name: "Guadalupe Mountains National Park", lat: 31.902019, lng: -104.908708 },
+            { name: "Mustang Island State Park", lat: 27.671329, lng: -97.173530 },
+            { name: "Port Aransas", lat: 27.832467, lng: -97.063204 },
+            { name: "Corpus Christi", lat: 27.796419, lng: -97.404129 },
+            { name: "Fredericksburg", lat: 30.271851, lng: -98.875290 },
+            { name: "San Antonio", lat: 29.425171, lng: -98.494614 }
+        ];
+
+        // Select the appropriate locations based on the state
+        const locations = (state === 'texas') ? texasLocations : californiaLocations;
+
+        // Remove existing markers (if any)
+        if (window.markers) {
+            window.markers.forEach(marker => marker.setMap(null)); // Remove all existing markers
+        }
+
+        // Create markers for the selected state
+        window.markers = locations.map(location => {
+            const marker = new google.maps.Marker({
+                position: { lat: location.lat, lng: location.lng },
+                map: map,
+                title: location.name
+            });
+
+            const contentString = `<h3>${location.name}</h3><a href="https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}" target="_blank">Get Directions</a>`;
+            const infoWindow = new google.maps.InfoWindow({
+                content: contentString,
+            });
+
+            marker.addListener("click", function() {
+                infoWindow.open(map, marker);
+            });
+
+            return marker; // Return the marker for future removal
+        });
+
+        // Adjust map center based on the selected state
+        if (state === 'texas') {
+            map.setCenter({ lat: 31.9686, lng: -99.9018 }); // Texas center
+        }
+    }
+
+    function showMap(state) {
+        initMap(state); // Initialize map with selected state
+    }
+
+    window.onload = function() {
+        initMap('california'); // Load California map by default
+    };
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6KqoT13LdD3Jgq_CWRPVa5_6HTW-Hdvw&callback=initMap"></script>
 
 </body>
 </html>
